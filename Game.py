@@ -19,22 +19,31 @@ class Game:
         self.current_player_index = 0
         self.show_board()
 
+    def is_draw(self):
+        return len(self.remaining_moves) is 0
+
+    def is_valid_move(self, move):
+        return move in self.remaining_moves
+
     def start(self):
         while not self.has_won():
-            if not len(self.remaining_moves):
+            if self.is_draw():
                 print('draw!!!!!')
                 return
             input_move = int(input(self.current_player.name+'\'s turn \n Enter your move:'))
-            while input_move not in self.remaining_moves:
+            while not self.is_valid_move(input_move):
                 input_move = int(input('Invalid move!! Please Enter valid move:'))
-            self.current_player.moves.append(input_move)
-            self.remaining_moves.remove(input_move)
-            self.board[input_move-1] = self.current_player.symbol
-            self.show_board()
+            self.place_move(input_move)
             if self.has_won():
                 print(self.current_player.name, 'won the game!!')
                 return
             self.switch_player()
+
+    def place_move(self, input_move):
+        self.current_player.moves.append(input_move)
+        self.remaining_moves.remove(input_move)
+        self.board[input_move - 1] = self.current_player.symbol
+        self.show_board()
 
     def has_won(self):
         for x in self.winning_moves:
