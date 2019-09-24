@@ -45,9 +45,12 @@ class Game:
         self.board[input_move - 1] = self.current_player.symbol
         self.show_board()
 
+    def is_subset(self, x):
+        set(x).issubset(self.current_player.moves)
+
     def has_won(self):
         for x in self.winning_moves:
-            if set(x).issubset(self.current_player.moves):
+            if self.is_subset(x):
                 return True
         return False
 
